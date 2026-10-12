@@ -5,8 +5,35 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "django-insecure-ojas-2026-bit-durg-dev-key")
-DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost,testserver").split(",")
+DEBUG = os.environ.get("DJANGO_DEBUG", "False") == "True"
+
+
+def _env_hosts(name):
+    raw = os.environ.get(name, "")
+    return [h.strip() for h in raw.split(",") if h.strip()]
+
+
+# Base hosts (local dev) + env override. Render hostnames are added
+# automatically below so deploys don't hit DisallowedHost.
+ALLOWED_HOSTS = _env_hosts("DJANGO_ALLOWED_HOSTS") or [
+    "127.0.0.1",
+    "localhost",
+    "testserver",
+]
+if ".onrender.com" not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(".onrender.com")
+_render_host = os.environ.get("RENDER_EXTERNAL_HOSTNAME", "").strip()
+if _render_host and _render_host not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(_render_host)
+
+CSRF_TRUSTED_ORIGINS = _env_hosts("DJANGO_CSRF_TRUSTED_ORIGINS") or [
+    "https://*.onrender.com",
+]
+if _render_host and f"https://{_render_host}" not in CSRF_TRUSTED_ORIGINS:
+    CSRF_TRUSTED_ORIGINS.append(f"https://{_render_host}")
+
+# Render terminates TLS at its proxy — tell Django the forwarded proto is https.
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -70,10 +97,14 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = "static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]
+_static_dir = BASE_DIR / "static"
+# Only add if it exists (Render builds from different roots otherwise warn).
+STATICFILES_DIRS = [_static_dir] if _static_dir.is_dir() else []
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STORAGES = {
-    "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
+    # Compressed (not manifest-hashed): never 500s when collectstatic
+    # hasn't run, still served efficiently by WhiteNoise.
+    "staticfiles": {"BACKEND": "whitenoise.storage.CompressedStaticFilesStorage"},
     "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
 }
 
