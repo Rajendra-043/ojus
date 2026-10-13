@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: ojus
+    env: python
+    buildCommand: bash build.sh
+    startCommand: cd backend && gunicorn ojas_backend.wsgi:application --bind 0.0.0.0:$PORT
+    healthCheckPath: /healthz/
+    envVars:
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: PYTHON_VERSION
+        value: 3.11.0
