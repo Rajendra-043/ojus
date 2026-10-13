@@ -1,10 +1,27 @@
 """Views: server-rendered homepage + small JSON API (no DRF needed)."""
 import json
 
+from django.db.utils import OperationalError, ProgrammingError
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+
+_DB_ERRORS = (OperationalError, ProgrammingError)
+
+
+def healthz(request):
+    """Render health check — no database access, never 500s on missing tables."""
+    return JsonResponse({"ok": True})
+
+
+def _fetch(model, *args, **kwargs):
+    """list(model.objects.filter(...)) or None when the DB/table is unavailable
+    (e.g. migrations haven't run in this environment yet)."""
+    try:
+        return list(model.objects.filter(*args, **kwargs))
+    except _DB_ERRORS:
+        return None
 
 from .forms import FeedbackForm, RegistrationForm
 from .models import (
@@ -82,29 +99,29 @@ def _qs_or_default(model, order_field="order", default_key=None, fmt=None):
 
 
 def index(request):
-    events = list(Event.objects.all()) or [
+    events = _fetch(Event) or [
         {"name": n, "description": d, "icon": "\u25a0"} for n, d in DEFAULTS["events"]
     ]
-    clubs = list(Club.objects.all()) or [
+    clubs = _fetch(Club) or [
         {"name": n, "category": c, "icon": "\u25a0"} for n, c in DEFAULTS["clubs"]
     ]
-    schedule = list(ScheduleEntry.objects.all()) or [
+    schedule = _fetch(ScheduleEntry) or [
         {"day": d, "morning": m, "afternoon": a, "evening": e}
         for d, m, a, e in DEFAULTS["schedule"]
     ]
-    gallery = list(GalleryItem.objects.all()) or [
+    gallery = _fetch(GalleryItem) or [
         {"title": t, "icon": "\u25a0"} for t in DEFAULTS["gallery"]
     ]
-    winners = list(Winner.objects.all()) or [
+    winners = _fetch(Winner) or [
         {"team_name": t, "category": c} for t, c in DEFAULTS["winners"]
     ]
-    updates = list(Update.objects.filter(is_active=True)) or [
+    updates = _fetch(Update, is_active=True) or [
         {"title": t, "description": d, "icon": "\u25a0"} for t, d in DEFAULTS["updates"]
     ]
-    help_topics = list(HelpTopic.objects.all()) or [
+    help_topics = _fetch(HelpTopic) or [
         {"title": t, "description": d, "icon": "\u25a0"} for t, d in DEFAULTS["help"]
     ]
-    faqs = list(FAQ.objects.all()) or [
+    faqs = _fetch(FAQ) or [
         {"question": q, "answer": a} for q, a in DEFAULTS["faqs"]
     ]
     context = {
@@ -127,8 +144,8 @@ def _serialize(qs, fields):
 
 
 def api_updates(request):
-    updates = Update.objects.filter(is_active=True).order_by("-created_at")
-    if not updates.exists():
+    updates = _fetch(Update, is_active=True)
+    if not updates:
         data = [{"id": 0, "title": t, "description": d, "icon": "\u25a0"} for t, d in DEFAULTS["updates"]]
     else:
         data = _serialize(updates, ["id", "title", "description", "icon"])
@@ -136,8 +153,8 @@ def api_updates(request):
 
 
 def api_events(request):
-    events = Event.objects.all()
-    if not events.exists():
+    events = _fetch(Event)
+    if not events:
         data = [{"id": 0, "name": n, "description": d} for n, d in DEFAULTS["events"]]
     else:
         data = _serialize(events, ["id", "name", "description"])
@@ -145,8 +162,8 @@ def api_events(request):
 
 
 def api_clubs(request):
-    clubs = Club.objects.all()
-    if not clubs.exists():
+    clubs = _fetch(Club)
+    if not clubs:
         data = [{"id": 0, "name": n, "category": c} for n, c in DEFAULTS["clubs"]]
     else:
         data = _serialize(clubs, ["id", "name", "category"])
@@ -154,8 +171,8 @@ def api_clubs(request):
 
 
 def api_schedule(request):
-    rows = ScheduleEntry.objects.all()
-    if not rows.exists():
+    rows = _fetch(ScheduleEntry)
+    if not rows:
         data = [{"day": d, "morning": m, "afternoon": a, "evening": e} for d, m, a, e in DEFAULTS["schedule"]]
     else:
         data = _serialize(rows, ["day", "morning", "afternoon", "evening"])
@@ -163,8 +180,8 @@ def api_schedule(request):
 
 
 def api_faqs(request):
-    faqs = FAQ.objects.all()
-    if not faqs.exists():
+    faqs = _fetch(FAQ)
+    if not faqs:
         data = [{"question": q, "answer": a} for q, a in DEFAULTS["faqs"]]
     else:
         data = _serialize(faqs, ["question", "answer"])
@@ -181,7 +198,13 @@ def _save_from_request(request, form_class):
     else:
         form = form_class(request.POST)
     if form.is_valid():
-        obj = form.save()
+        try:
+            obj = form.save()
+        except _DB_ERRORS:
+            return JsonResponse(
+                {"ok": False, "error": "Database unavailable — migrations have not run yet."},
+                status=503,
+            )
         return JsonResponse({"ok": True, "id": obj.pk})
     return JsonResponse({"ok": False, "errors": form.errors}, status=400)
 
@@ -201,6 +224,15 @@ def api_feedback(request):
 def register_page(request):
     form = RegistrationForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
-        form.save()
+        try:
+            form.save()
+        except _DB_ERRORS:
+            return render(
+                request,
+                "core/index.html",
+                {"reg_form": form, "fb_form": FeedbackForm(),
+                 "db_error": "Registration database is unavailable — please try again later."},
+                status=503,
+            )
         return render(request, "core/index.html", {"reg_ok": True, "reg_form": RegistrationForm(), "fb_form": FeedbackForm()})
     return render(request, "core/index.html", {"reg_form": form, "fb_form": FeedbackForm()})
