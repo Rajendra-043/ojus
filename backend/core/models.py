@@ -6,7 +6,7 @@ class Club(models.Model):
     name = models.CharField(max_length=80, unique=True)
     category = models.CharField(max_length=80, default="")
     description = models.CharField(max_length=200, default="", blank=True)
-    icon = models.CharField(max_length=8, default="\u25a0")
+    icon = models.CharField(max_length=8, default="\U0001F91D")
     order = models.PositiveIntegerField(default=0)
 
     class Meta:
@@ -19,7 +19,7 @@ class Club(models.Model):
 class Event(models.Model):
     name = models.CharField(max_length=80, unique=True)
     description = models.CharField(max_length=200, default="")
-    icon = models.CharField(max_length=8, default="\u25a0")
+    icon = models.CharField(max_length=8, default="\U0001F3AF")
     club = models.ForeignKey(Club, null=True, blank=True, on_delete=models.SET_NULL, related_name="events")
     order = models.PositiveIntegerField(default=0)
 
@@ -47,7 +47,7 @@ class ScheduleEntry(models.Model):
 
 class GalleryItem(models.Model):
     title = models.CharField(max_length=80)
-    icon = models.CharField(max_length=8, default="\u25a0")
+    icon = models.CharField(max_length=8, default="\U0001F4F8")
     order = models.PositiveIntegerField(default=0)
 
     class Meta:
@@ -74,7 +74,7 @@ class Update(models.Model):
 
     title = models.CharField(max_length=120)
     description = models.CharField(max_length=300)
-    icon = models.CharField(max_length=8, default="\u25a0")
+    icon = models.CharField(max_length=8, default="\U0001F4E3")
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -88,7 +88,7 @@ class Update(models.Model):
 class HelpTopic(models.Model):
     title = models.CharField(max_length=80)
     description = models.CharField(max_length=300)
-    icon = models.CharField(max_length=8, default="\u25a0")
+    icon = models.CharField(max_length=8, default="\U0001F198")
     order = models.PositiveIntegerField(default=0)
 
     class Meta:

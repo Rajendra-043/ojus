@@ -100,26 +100,26 @@ def _qs_or_default(model, order_field="order", default_key=None, fmt=None):
 
 def index(request):
     events = _fetch(Event) or [
-        {"name": n, "description": d, "icon": "\u25a0"} for n, d in DEFAULTS["events"]
+        {"name": n, "description": d, "icon": "\U0001F3AF"} for n, d in DEFAULTS["events"]
     ]
     clubs = _fetch(Club) or [
-        {"name": n, "category": c, "icon": "\u25a0"} for n, c in DEFAULTS["clubs"]
+        {"name": n, "category": c, "icon": "\U0001F91D"} for n, c in DEFAULTS["clubs"]
     ]
     schedule = _fetch(ScheduleEntry) or [
         {"day": d, "morning": m, "afternoon": a, "evening": e}
         for d, m, a, e in DEFAULTS["schedule"]
     ]
     gallery = _fetch(GalleryItem) or [
-        {"title": t, "icon": "\u25a0"} for t in DEFAULTS["gallery"]
+        {"title": t, "icon": "\U0001F4F8"} for t in DEFAULTS["gallery"]
     ]
     winners = _fetch(Winner) or [
         {"team_name": t, "category": c} for t, c in DEFAULTS["winners"]
     ]
     updates = _fetch(Update, is_active=True) or [
-        {"title": t, "description": d, "icon": "\u25a0"} for t, d in DEFAULTS["updates"]
+        {"title": t, "description": d, "icon": "\U0001F4E3"} for t, d in DEFAULTS["updates"]
     ]
     help_topics = _fetch(HelpTopic) or [
-        {"title": t, "description": d, "icon": "\u25a0"} for t, d in DEFAULTS["help"]
+        {"title": t, "description": d, "icon": "\U0001F198"} for t, d in DEFAULTS["help"]
     ]
     faqs = _fetch(FAQ) or [
         {"question": q, "answer": a} for q, a in DEFAULTS["faqs"]
@@ -146,7 +146,7 @@ def _serialize(qs, fields):
 def api_updates(request):
     updates = _fetch(Update, is_active=True)
     if not updates:
-        data = [{"id": 0, "title": t, "description": d, "icon": "\u25a0"} for t, d in DEFAULTS["updates"]]
+        data = [{"id": 0, "title": t, "description": d, "icon": "\U0001F4E3"} for t, d in DEFAULTS["updates"]]
     else:
         data = _serialize(updates, ["id", "title", "description", "icon"])
     return JsonResponse({"updates": data})

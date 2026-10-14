@@ -23,18 +23,18 @@ async function get(path, key) {
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
 document.addEventListener("DOMContentLoaded", async () => {
   let events = await get("/api/events/","events") || FALLBACK.events.map(([name,description])=>({name,description}));
-  document.getElementById("events-grid").innerHTML = events.map(e=>`<div class="event"><b>\u25a0</b><h3>${esc(e.name||e[0])}</h3><p>${esc(e.description||e[1]||"")}</p></div>`).join("");
+  document.getElementById("events-grid").innerHTML = events.map(e=>`<div class="event"><b>🎯</b><h3>${esc(e.name||e[0])}</h3><p>${esc(e.description||e[1]||"")}</p></div>`).join("");
   let clubs = await get("/api/clubs/","clubs") || FALLBACK.clubs.map(([name,category])=>({name,category}));
-  document.getElementById("clubs-grid").innerHTML = clubs.map(c=>`<div class="club"><b>\u25a0</b><h3>${esc(c.name||c[0])}</h3><p>${esc(c.category||c[1]||"")}</p></div>`).join("");
+  document.getElementById("clubs-grid").innerHTML = clubs.map(c=>`<div class="club"><b>🤝</b><h3>${esc(c.name||c[0])}</h3><p>${esc(c.category||c[1]||"")}</p></div>`).join("");
   let sch = await get("/api/schedule/","schedule") || FALLBACK.schedule.map(([day,morning,afternoon,evening])=>({day,morning,afternoon,evening}));
   const tbl = document.getElementById("schedule-table");
   sch.forEach(s=>{const tr=document.createElement("tr");tr.innerHTML=`<td>${esc(s.day||s[0])}</td><td>${esc(s.morning||s[1])}</td><td>${esc(s.afternoon||s[2])}</td><td>${esc(s.evening||s[3])}</td>`;tbl.appendChild(tr);});
   const gal = FALLBACK.gallery;
-  document.getElementById("gallery-grid").innerHTML = gal.map(t=>`<div class="photo">\u25a0<span>${esc(t)}</span></div>`).join("");
+  document.getElementById("gallery-grid").innerHTML = gal.map(t=>`<div class="photo">📸<span>${esc(t)}</span></div>`).join("");
   document.getElementById("winners-grid").innerHTML = FALLBACK.winners.map(([t,c])=>`<div class="winner"><h3>\u25a0 ${esc(t)}</h3><p>${esc(c)}</p></div>`).join("");
   let upd = await get("/api/updates/","updates") || FALLBACK.updates.map(([title,description])=>({title,description}));
   document.getElementById("updates-grid").innerHTML = upd.map(u=>`<div class="card"><h3>\u25a0 ${esc(u.title||u[0])}</h3><p>${esc(u.description||u[1]||"")}</p></div>`).join("");
-  document.getElementById("help-grid").innerHTML = FALLBACK.help.map(([t,d])=>`<div class="help"><b>\u25a0</b><h3>${esc(t)}</h3><p>${esc(d)}</p></div>`).join("");
+  document.getElementById("help-grid").innerHTML = FALLBACK.help.map(([t,d])=>`<div class="help"><b>🆘</b><h3>${esc(t)}</h3><p>${esc(d)}</p></div>`).join("");
   let faqs = await get("/api/faqs/","faqs") || FALLBACK.faqs.map(([question,answer])=>({question,answer}));
   document.getElementById("faq-list").innerHTML = faqs.map(f=>`<div class="question"><h3>${esc(f.question||f[0])}</h3><p>${esc(f.answer||f[1]||"")}</p></div>`).join("");
   for (const [id,url,ok] of [["register-form","/api/register/","Registered! See you at OJAS 2026."],["feedback-form","/api/feedback/","Thanks for your feedback!"]]) {

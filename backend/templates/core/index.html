@@ -64,7 +64,7 @@
   <div class="title"><small>EVENTS</small><h2>Explore Events</h2><p>Find your interest and show your talent.</p></div>
   <div class="grid">
     {% for e in events %}
-    <div class="event"><b>{{ e.icon|default:"&#9632;" }}</b><h3>{{ e.name }}</h3><p>{{ e.description }}</p></div>
+    <div class="event"><b>{{ e.icon|default:"🎯" }}</b><h3>{{ e.name }}</h3><p>{{ e.description }}</p></div>
     {% endfor %}
   </div>
 </section>
@@ -74,7 +74,7 @@
   <div class="title"><small>STUDENT CLUBS</small><h2>Find Your Interest</h2><p>Communicate, participate, create and grow.</p></div>
   <div class="club-grid">
     {% for c in clubs %}
-    <div class="club"><b>{{ c.icon|default:"&#9632;" }}</b><h3>{{ c.name }}</h3><p>{{ c.category }}</p></div>
+    <div class="club"><b>{{ c.icon|default:"🤝" }}</b><h3>{{ c.name }}</h3><p>{{ c.category }}</p></div>
     {% endfor %}
   </div>
 </section>
@@ -95,7 +95,7 @@
   <div class="title"><small>MEMORIES</small><h2>OJAS Gallery</h2><p>A glimpse of campus celebrations.</p></div>
   <div class="gallery">
     {% for g in gallery %}
-    <div class="photo">{{ g.icon|default:"&#9632;" }}<span>{{ g.title }}</span></div>
+    <div class="photo">{{ g.icon|default:"📸" }}<span>{{ g.title }}</span></div>
     {% endfor %}
   </div>
 </section>
@@ -105,7 +105,7 @@
   <div class="title"><small>HALL OF FAME</small><h2>Previous Winners</h2><p>Celebrating talent and achievement.</p></div>
   <div class="grid">
     {% for w in winners %}
-    <div class="winner"><h3>&#9632; {{ w.team_name }}</h3><p>{{ w.category }}</p></div>
+    <div class="winner"><h3>🏆 {{ w.team_name }}</h3><p>{{ w.category }}</p></div>
     {% endfor %}
   </div>
 </section>
@@ -115,7 +115,7 @@
   <div class="title"><small>UPDATES</small><h2>What's New?</h2></div>
   <div class="grid" id="updates-grid">
     {% for u in updates %}
-    <div class="card"><h3>&#9632; {{ u.title }}</h3><p>{{ u.description }}</p></div>
+    <div class="card"><h3>📣 {{ u.title }}</h3><p>{{ u.description }}</p></div>
     {% endfor %}
   </div>
 </section>
@@ -125,7 +125,7 @@
   <div class="title"><small>HELP &amp; SUPPORT</small><h2>OJAS Help Desk</h2><p>Facing a problem? We are here to help.</p></div>
   <div class="grid">
     {% for h in help_topics %}
-    <div class="help"><b>{{ h.icon|default:"&#9632;" }}</b><h3>{{ h.title }}</h3><p>{{ h.description }}</p></div>
+    <div class="help"><b>{{ h.icon|default:"🆘" }}</b><h3>{{ h.title }}</h3><p>{{ h.description }}</p></div>
     {% endfor %}
   </div>
 </section>
@@ -134,10 +134,10 @@
 <section id="contact">
   <div class="title"><small>CONTACT US</small><h2>Need More Help?</h2><p>We are happy to assist you.</p></div>
   <div class="contact-box">
-    <div class="contact"><h3>&#9632; College</h3><p>Bhilai Institute of Technology, Durg</p></div>
-    <div class="contact"><h3>&#9632; Email</h3><p>ojas@bitdurg.ac.in</p></div>
-    <div class="contact"><h3>&#9632; Help Desk</h3><p>Contact the OJAS Help Desk during the fest.</p></div>
-    <div class="contact"><h3>&#9632; Timing</h3><p>During major OJAS events and activities.</p></div>
+    <div class="contact"><h3>🏫 College</h3><p>Bhilai Institute of Technology, Durg</p></div>
+    <div class="contact"><h3>✉️ Email</h3><p>ojas@bitdurg.ac.in</p></div>
+    <div class="contact"><h3>🆘 Help Desk</h3><p>Contact the OJAS Help Desk during the fest.</p></div>
+    <div class="contact"><h3>🕐 Timing</h3><p>During major OJAS events and activities.</p></div>
   </div>
 </section>
 
