@@ -39,7 +39,7 @@
       fetch("/api/updates/").then((r) => r.json()).then((d) => {
         if (!d.updates || !d.updates.length) return;
         grid.innerHTML = d.updates.map((u) =>
-          `<div class="card"><h3>\u25a0 ${u.title}</h3><p>${u.description}</p></div>`
+          `<div class="card"><h3>📣 ${u.title}</h3><p>${u.description}</p></div>`
         ).join("");
       }).catch(() => {});
     }

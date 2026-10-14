@@ -3,12 +3,12 @@
 *{margin:0;padding:0;box-sizing:border-box;scroll-behavior:smooth}
 html{scroll-padding-top:100px}
 body{font-family:Arial,Helvetica,sans-serif;line-height:1.5;color:#16202b;background-color:#e8ecf1;
-  background-image:linear-gradient(rgba(255,255,255,.44),rgba(255,255,255,.58)),url("media/campus.jpg");
+  background-image:url("media/campus.jpg");
   background-size:cover;background-position:center center;background-attachment:fixed;background-repeat:no-repeat;min-height:100vh}
 a{color:#16202b;text-decoration:none}
 nav{position:sticky;top:0;z-index:9999;min-height:72px;display:flex;align-items:center;justify-content:space-between;
   flex-wrap:wrap;gap:8px 22px;padding:10px clamp(14px,4vw,48px);width:100%;
-  background:rgba(255,255,255,.95);border-bottom:1px solid rgba(0,0,0,.16);box-shadow:0 4px 14px rgba(0,0,0,.18)}
+  background:rgba(48,52,34,.96);border-bottom:1px solid rgba(255,255,255,.16);box-shadow:0 4px 14px rgba(0,0,0,.18)}
 .logo{font-size:clamp(20px,2vw,27px);font-weight:900;color:#000!important}
 .logo span{color:#000!important}
 nav .logo{flex:0 0 auto;line-height:1.15}
@@ -24,7 +24,7 @@ section[id],header[id],footer[id]{scroll-margin-top:100px}
 .title h2{font-size:32px;margin:7px;color:#16202b}
 .title p{color:#16202b}
 .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:65px 7% 55px;
-  background:linear-gradient(rgba(255,255,255,.22),rgba(255,255,255,.44))}
+  background:transparent}
 .hero>div{width:100%;max-width:1120px;margin:auto}
 .hero small{color:#16202b;letter-spacing:2px;font-weight:700}
 .hero h1{font-size:100px;line-height:1.05;color:#16202b;font-weight:800}
@@ -39,8 +39,8 @@ section[id],header[id],footer[id]{scroll-margin-top:100px}
 .card h3,.event h3,.club h3,.winner h3,.help h3,.question h3,.contact h3{color:#16202b;font-weight:800}
 .card p,.event p,.club p,.winner p,.help p,.question p,.contact p{color:#16202b}
 .stat{text-align:center}.stat h3{font-size:28px;color:#16202b}
-.about,.clubs,.faq{background:rgba(255,255,255,.55)}
-.help-section,.new{background:rgba(255,255,255,.42)}
+.about,.clubs,.faq{background:transparent}
+.help-section,.new{background:transparent}
 .about-text{max-width:850px;text-align:center;margin:auto;color:#16202b}
 .points{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-top:20px;color:#16202b;font-weight:700}
 .event b,.club b,.help b{font-size:30px}

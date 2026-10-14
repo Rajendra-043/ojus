@@ -31,9 +31,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   sch.forEach(s=>{const tr=document.createElement("tr");tr.innerHTML=`<td>${esc(s.day||s[0])}</td><td>${esc(s.morning||s[1])}</td><td>${esc(s.afternoon||s[2])}</td><td>${esc(s.evening||s[3])}</td>`;tbl.appendChild(tr);});
   const gal = FALLBACK.gallery;
   document.getElementById("gallery-grid").innerHTML = gal.map(t=>`<div class="photo">📸<span>${esc(t)}</span></div>`).join("");
-  document.getElementById("winners-grid").innerHTML = FALLBACK.winners.map(([t,c])=>`<div class="winner"><h3>\u25a0 ${esc(t)}</h3><p>${esc(c)}</p></div>`).join("");
+  document.getElementById("winners-grid").innerHTML = FALLBACK.winners.map(([t,c])=>`<div class="winner"><h3>🏆 ${esc(t)}</h3><p>${esc(c)}</p></div>`).join("");
   let upd = await get("/api/updates/","updates") || FALLBACK.updates.map(([title,description])=>({title,description}));
-  document.getElementById("updates-grid").innerHTML = upd.map(u=>`<div class="card"><h3>\u25a0 ${esc(u.title||u[0])}</h3><p>${esc(u.description||u[1]||"")}</p></div>`).join("");
+  document.getElementById("updates-grid").innerHTML = upd.map(u=>`<div class="card"><h3>📣 ${esc(u.title||u[0])}</h3><p>${esc(u.description||u[1]||"")}</p></div>`).join("");
   document.getElementById("help-grid").innerHTML = FALLBACK.help.map(([t,d])=>`<div class="help"><b>🆘</b><h3>${esc(t)}</h3><p>${esc(d)}</p></div>`).join("");
   let faqs = await get("/api/faqs/","faqs") || FALLBACK.faqs.map(([question,answer])=>({question,answer}));
   document.getElementById("faq-list").innerHTML = faqs.map(f=>`<div class="question"><h3>${esc(f.question||f[0])}</h3><p>${esc(f.answer||f[1]||"")}</p></div>`).join("");
